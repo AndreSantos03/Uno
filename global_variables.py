@@ -1,0 +1,34 @@
+import os
+import pygame
+import json
+
+pygame.init()
+
+GAME_FOLDER = os.path.dirname(__file__)
+TEXTURE_FOLDER = os.path.join(GAME_FOLDER,'Textures')
+SOUND_FOLDER = os.path.join(GAME_FOLDER,'Sounds')
+UI_FOLDER = os.path.join(TEXTURE_FOLDER,'UI')
+CARDS_FOLDER = os.path.join(TEXTURE_FOLDER,'Cards')
+SETTINGS = os.path.join(GAME_FOLDER,'settings.json')
+
+BACKGROUND_MUSIC = os.path.join(SOUND_FOLDER,'BackMusic.mp3')
+
+BACKGROUND_IMAGE = os.path.join(UI_FOLDER,'BackGround Uno Online.png')
+RETRO_FONT = os.path.join(GAME_FOLDER,'Retro Gaming.ttf')
+LEFT_ARROW = os.path.join(UI_FOLDER,'Left Arrow.png')
+RIGHT_ARROW = os.path.join(UI_FOLDER,'Right Arrow.png')
+CLOSE_SIGN = os.path.join(UI_FOLDER,'X Sign.png')
+
+PAUSE_TIMER = 0.7
+
+info_screen = pygame.display.Info()
+HEIGHT = info_screen.current_h
+WIDTH = HEIGHT * 16 / 9 #to force a 16:9, i have an ultrawide and it was bugging me
+
+PLAYED_CARD_SOUND = pygame.mixer.Sound(os.path.join(SOUND_FOLDER,'Card placed.mp3'))
+
+with open(SETTINGS,'r') as read_json:
+    JSON_DATA = json.load(read_json)
+    FPS = JSON_DATA['fps']
+    MUSIC_VOLUME = JSON_DATA['music_volume']
+    EFFECTS_VOLUME = JSON_DATA['effects_volume']
