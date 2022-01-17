@@ -23,7 +23,7 @@ transparent_surface.fill((0,0,0))
 set_menu_rect = pygame.Rect(0,0,global_variables.WIDTH/1.35,global_variables.HEIGHT/1.35)
 set_menu_rect.center = (global_variables.WIDTH/2,global_variables.HEIGHT/2)
 
-options_font = pygame.font.Font(global_variables.RETRO_FONT,int(global_variables.WIDTH/64))
+options_font = pygame.font.Font(global_variables.RETRO_FONT,int(global_variables.WIDTH/80))
 
 #resolution
 resolution_options_img = options_font.render("Resolution:",True,(255,255,255))
