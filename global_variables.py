@@ -23,7 +23,7 @@ PAUSE_TIMER = 1
 
 info_screen = pygame.display.Info()
 HEIGHT = info_screen.current_h
-WIDTH = HEIGHT * 16 / 9 #to force a 16:9, i have an ultrawide and it was bugging me
+WIDTH = round(HEIGHT * 16 / 9) #to force a 16:9, i have an ultrawide and it was bugging me
 
 PLAYED_CARD_SOUND = pygame.mixer.Sound(os.path.join(SOUND_FOLDER,'Card placed.mp3'))
 MENU_SOUND = pygame.mixer.Sound(os.path.join(SOUND_FOLDER,'Menu Sound.mp3'))
