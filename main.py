@@ -1,4 +1,3 @@
-from glob import glob
 import pygame
 import sys
 import global_variables
