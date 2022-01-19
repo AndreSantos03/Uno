@@ -37,7 +37,7 @@ music_volume_rect = resolution_options_img.get_rect(center=(int(global_variables
 percentage_sign_image = options_font.render("%",True,(255,255,255))
 percentage_sign_rect_1 = resolution_options_img.get_rect(center=(int(global_variables.WIDTH / 3 + global_variables.WIDTH / 3.75),int(global_variables.HEIGHT / 4 + global_variables.HEIGHT / 14)))
 m_volume_value_img = options_font.render("{}".format(global_variables.MUSIC_VOLUME * 100),True,(255,255,255))
-m_volume_value_rect = m_volume_value_img.get_rect(center = (int(global_variables.WIDTH / 3 + global_variables.WIDTH / 4.7),int(global_variables.HEIGHT / 4 + global_variables.HEIGHT / 14)))
+m_volume_value_rect = m_volume_value_img.get_rect(center = (int(global_variables.WIDTH / 3 + global_variables.WIDTH / 4.8),int(global_variables.HEIGHT / 4 + global_variables.HEIGHT / 14)))
 left_arrow = pygame.image.load(global_variables.LEFT_ARROW)
 left_arrow = pygame.transform.scale(left_arrow,(int(global_variables.WIDTH/20),int(global_variables.HEIGHT/30)))
 left_arrow_rect_1 = left_arrow.get_rect(center=(int(global_variables.WIDTH / 3 + global_variables.WIDTH / 9),int(global_variables.HEIGHT / 4 + global_variables.HEIGHT / 14)))
@@ -48,13 +48,13 @@ effects_volume_img = options_font.render("Effects Volume:",True,(255,255,255))
 effects_volume_rect = resolution_options_img.get_rect(center=(int(global_variables.WIDTH / 3),int(global_variables.HEIGHT / 4 + global_variables.HEIGHT / 14 * 2)))
 percentage_sign_rect_2 = resolution_options_img.get_rect(center=(int(global_variables.WIDTH / 3 + global_variables.WIDTH / 3.75),int(global_variables.HEIGHT / 4 + global_variables.HEIGHT / 14 * 2)))
 effects_volume_value_img = options_font.render("{}".format(int(global_variables.EFFECTS_VOLUME * 100)),True,(255,255,255))
-effects_volume_value_rect = m_volume_value_img.get_rect(center = (int(global_variables.WIDTH / 3 + global_variables.WIDTH / 4.7),int(global_variables.HEIGHT / 4 + global_variables.HEIGHT / 14 * 2)))
+effects_volume_value_rect = m_volume_value_img.get_rect(center = (int(global_variables.WIDTH / 3 + global_variables.WIDTH / 4.8),int(global_variables.HEIGHT / 4 + global_variables.HEIGHT / 14 * 2)))
 left_arrow_rect_2 = left_arrow.get_rect(center=(int(global_variables.WIDTH / 3 + global_variables.WIDTH / 9),int(global_variables.HEIGHT / 4 + global_variables.HEIGHT / 14 * 2)))
 right_arrow_rect_2 = right_arrow.get_rect(center=(int(global_variables.WIDTH / 3 + global_variables.WIDTH / 6),int(global_variables.HEIGHT / 4 + + global_variables.HEIGHT / 14 * 2)))
 fps_image = options_font.render("FPS:",True,(255,255,255))
 fps_rect = resolution_options_img.get_rect(center=(int(global_variables.WIDTH / 3),int(global_variables.HEIGHT / 4 + global_variables.HEIGHT / 14 * 3)))
 fps_value_image = options_font.render("{}".format(global_variables.FPS),True,(255,255,255))
-fps_value_rect = fps_value_image.get_rect(center = (int(global_variables.WIDTH / 3 + global_variables.WIDTH / 4.7),int(global_variables.HEIGHT / 4 + global_variables.HEIGHT / 14 * 3)))
+fps_value_rect = fps_value_image.get_rect(center = (int(global_variables.WIDTH / 3 + global_variables.WIDTH / 4.8),int(global_variables.HEIGHT / 4 + global_variables.HEIGHT / 14 * 3)))
 left_arrow_rect_3 = left_arrow.get_rect(center=(int(global_variables.WIDTH / 3 + global_variables.WIDTH / 9),int(global_variables.HEIGHT / 4 + global_variables.HEIGHT / 14 * 3)))
 right_arrow_rect_3 = right_arrow.get_rect(center=(int(global_variables.WIDTH / 3 + global_variables.WIDTH / 6),int(global_variables.HEIGHT / 4 + + global_variables.HEIGHT / 14 * 3)))
 
@@ -79,9 +79,7 @@ def loading_image(screen):
     
     pygame.display.flip()
 
-
 def beggining_menu():
-
     SCREEN = pygame.display.set_mode((global_variables.WIDTH , global_variables.HEIGHT))
 
     pygame.display.set_caption("Uno")
@@ -89,6 +87,11 @@ def beggining_menu():
     background_image = pygame.image.load(global_variables.BACKGROUND_IMAGE)
     background_image = pygame.transform.scale(background_image,(global_variables.WIDTH ,global_variables.HEIGHT))
     background_image_rect = background_image.get_rect()
+
+    #update values from json
+    m_volume_value_img = options_font.render("{}".format(int(global_variables.MUSIC_VOLUME * 100)),True,(255,255,255))
+    effects_volume_value_img = options_font.render("{}".format(int(global_variables.EFFECTS_VOLUME * 100)),True,(255,255,255))
+    fps_value_image = options_font.render("{}".format(global_variables.FPS),True,(255,255,255))
 
     mouse_position = (111111,11111111) #meaningless value
     run = True
@@ -137,58 +140,67 @@ def beggining_menu():
                     global_variables.MENU_SOUND.play()
                     loading_image(SCREEN)
                     return 1
-                elif menu_up and left_arrow_rect_1.collidepoint(mouse_position) and global_variables.MUSIC_VOLUME > 0:
-                    global_variables.MENU_SOUND.play()
-                    global_variables.MUSIC_VOLUME = round(global_variables.MUSIC_VOLUME - 0.1,1)
-                    global_variables.JSON_DATA['music_volume'] = global_variables.MUSIC_VOLUME
-                    with open(global_variables.SETTINGS,'w') as dump_json:
-                        json.dump(global_variables.JSON_DATA,dump_json)
-                    pygame.mixer.music.set_volume(global_variables.MUSIC_VOLUME)
-                elif menu_up and right_arrow_rect_1.collidepoint(mouse_position) and global_variables.MUSIC_VOLUME < 1:
-                    global_variables.MENU_SOUND.play()
-                    global_variables.MUSIC_VOLUME = round(global_variables.MUSIC_VOLUME + 0.1,1)
-                    global_variables.JSON_DATA['music_volume'] = global_variables.MUSIC_VOLUME
-                    with open(global_variables.SETTINGS,'w') as dump_json:
-                        json.dump(global_variables.JSON_DATA,dump_json)
-                    pygame.mixer.music.set_volume(global_variables.MUSIC_VOLUME)
-                elif menu_up and left_arrow_rect_2.collidepoint(mouse_position) and global_variables.EFFECTS_VOLUME > 0:
-                    global_variables.MENU_SOUND.play()
-                    global_variables.EFFECTS_VOLUME = round(global_variables.EFFECTS_VOLUME - 0.1,1)
-                    global_variables.JSON_DATA['effects_volume'] = global_variables.EFFECTS_VOLUME
-                    with open(global_variables.SETTINGS,'w') as dump_json:
-                        json.dump(global_variables.JSON_DATA,dump_json)
-                elif menu_up and right_arrow_rect_2.collidepoint(mouse_position) and global_variables.EFFECTS_VOLUME < 1:
-                    global_variables.MENU_SOUND.play()
-                    global_variables.EFFECTS_VOLUME = round(global_variables.EFFECTS_VOLUME + 0.1,1)
-                    global_variables.JSON_DATA['effects_volume'] = global_variables.EFFECTS_VOLUME
-                    with open(global_variables.SETTINGS,'w') as dump_json:
-                        json.dump(global_variables.JSON_DATA,dump_json)
-                elif menu_up and left_arrow_rect_3.collidepoint(mouse_position) and global_variables.FPS > 30:
-                    global_variables.MENU_SOUND.play()
-                    index_fps = fps_changes.index(global_variables.FPS)
-                    global_variables.FPS = fps_changes[index_fps - 1]
-                    global_variables.JSON_DATA['fps'] = global_variables.FPS
-                    with open(global_variables.SETTINGS,'w') as dump_json:
-                        json.dump(global_variables.JSON_DATA,dump_json)
-                elif menu_up and right_arrow_rect_3.collidepoint(mouse_position) and global_variables.FPS < 300:
-                    global_variables.MENU_SOUND.play()
-                    index_fps = fps_changes.index(global_variables.FPS)
-                    global_variables.FPS = fps_changes[index_fps + 1]
-                    global_variables.JSON_DATA['fps'] = global_variables.FPS
-                    with open(global_variables.SETTINGS,'w') as dump_json:
-                        json.dump(global_variables.JSON_DATA,dump_json)
-                elif menu_up and close_rect.collidepoint(mouse_position):
-                    global_variables.MENU_SOUND.play()
-                    menu_up = False
-                   
-                #update values
+                if menu_up:
+                    if left_arrow_rect_1.collidepoint(mouse_position) and global_variables.MUSIC_VOLUME > 0:
+                        global_variables.MENU_SOUND.play()
+                        global_variables.MUSIC_VOLUME = round(global_variables.MUSIC_VOLUME - 0.1,1)
+                        global_variables.JSON_DATA['music_volume'] = global_variables.MUSIC_VOLUME
+                        with open(global_variables.SETTINGS,'w') as dump_json:
+                            json.dump(global_variables.JSON_DATA,dump_json)
+                        pygame.mixer.music.set_volume(global_variables.MUSIC_VOLUME)
+                    elif right_arrow_rect_1.collidepoint(mouse_position) and global_variables.MUSIC_VOLUME < 1:
+                        global_variables.MENU_SOUND.play()
+                        global_variables.MUSIC_VOLUME = round(global_variables.MUSIC_VOLUME + 0.1,1)
+                        global_variables.JSON_DATA['music_volume'] = global_variables.MUSIC_VOLUME
+                        with open(global_variables.SETTINGS,'w') as dump_json:
+                            json.dump(global_variables.JSON_DATA,dump_json)
+                        pygame.mixer.music.set_volume(global_variables.MUSIC_VOLUME)
+                    elif left_arrow_rect_2.collidepoint(mouse_position) and global_variables.EFFECTS_VOLUME > 0:
+                        global_variables.MENU_SOUND.play()
+                        global_variables.EFFECTS_VOLUME = round(global_variables.EFFECTS_VOLUME - 0.1,1)
+                        global_variables.JSON_DATA['effects_volume'] = global_variables.EFFECTS_VOLUME
+                        with open(global_variables.SETTINGS,'w') as dump_json:
+                            json.dump(global_variables.JSON_DATA,dump_json)
+                    elif right_arrow_rect_2.collidepoint(mouse_position) and global_variables.EFFECTS_VOLUME < 1:
+                        global_variables.MENU_SOUND.play()
+                        global_variables.EFFECTS_VOLUME = round(global_variables.EFFECTS_VOLUME + 0.1,1)
+                        global_variables.JSON_DATA['effects_volume'] = global_variables.EFFECTS_VOLUME
+                        with open(global_variables.SETTINGS,'w') as dump_json:
+                            json.dump(global_variables.JSON_DATA,dump_json)
+                    elif left_arrow_rect_3.collidepoint(mouse_position) and global_variables.FPS > 30:
+                        global_variables.MENU_SOUND.play()
+                        index_fps = fps_changes.index(global_variables.FPS)
+                        global_variables.FPS = fps_changes[index_fps - 1]
+                        global_variables.JSON_DATA['fps'] = global_variables.FPS
+                        with open(global_variables.SETTINGS,'w') as dump_json:
+                            json.dump(global_variables.JSON_DATA,dump_json)
+                    elif right_arrow_rect_3.collidepoint(mouse_position) and global_variables.FPS < 300:
+                        global_variables.MENU_SOUND.play()
+                        index_fps = fps_changes.index(global_variables.FPS)
+                        global_variables.FPS = fps_changes[index_fps + 1]
+                        global_variables.JSON_DATA['fps'] = global_variables.FPS
+                        with open(global_variables.SETTINGS,'w') as dump_json:
+                            json.dump(global_variables.JSON_DATA,dump_json)
+                    elif close_rect.collidepoint(mouse_position):
+                        global_variables.MENU_SOUND.play()
+                        menu_up = False
+                else:
+                    global_variables.MENU_SOUND.set_volume(global_variables.EFFECTS_VOLUME)
+                    if quit_rect.collidepoint(mouse_position) and not menu_up:
+                        global_variables.MENU_SOUND.play()
+                        return 0
+                    elif settings_rect.collidepoint(mouse_position) and not menu_up:
+                        global_variables.MENU_SOUND.play()
+                        menu_up = True
+                    elif play_rect.collidepoint(mouse_position) and not menu_up:
+                        global_variables.MENU_SOUND.play()
+                        loading_image(SCREEN)
+                        return 1
 
+                #update values
                 m_volume_value_img = options_font.render("{}".format(int(global_variables.MUSIC_VOLUME * 100)),True,(255,255,255))
                 effects_volume_value_img = options_font.render("{}".format(int(global_variables.EFFECTS_VOLUME * 100)),True,(255,255,255))
                 fps_value_image = options_font.render("{}".format(global_variables.FPS),True,(255,255,255))
-
-
-                # if left_mouse_pressed:
                                
 
         #draw all the visual part
@@ -220,5 +232,5 @@ def beggining_menu():
             SCREEN.blit(left_arrow,left_arrow_rect_3)
             SCREEN.blit(right_arrow,right_arrow_rect_3)
             SCREEN.blit(close_img,close_rect)
-
+            
         pygame.display.flip()

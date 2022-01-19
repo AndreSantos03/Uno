@@ -1,8 +1,8 @@
 import pygame
 import sys
 import global_variables
-import game_loop
-import initial_menu
+from game_loop import main_game_loop
+from initial_menu import beggining_menu
 
 pygame.init()
 
@@ -12,8 +12,8 @@ pygame.mixer.music.load(global_variables.BACKGROUND_MUSIC)
 pygame.mixer.music.play(-1)
 pygame.mixer.music.set_volume(global_variables.MUSIC_VOLUME)
 
-if initial_menu.beggining_menu():
-    game_loop.main_game_loop()
+if beggining_menu():
+    main_game_loop()
         
 pygame.quit()
 sys.exit(0)
