@@ -85,7 +85,7 @@ class Card():
         self.instance = self.identifier[3]
 
         self.image = pygame.image.load(card_image_handler(self.identifier))
-        self.image = pygame.transform.scale(self.image,(global_variables.WIDTH / 17.5,global_variables.HEIGHT/4.7))
+        self.image = pygame.transform.scale(self.image,(int(global_variables.WIDTH / 17.5),int(global_variables.HEIGHT/4.7)))
         self.rect = self.image.get_rect()
 
     def is_clicked(self,deck_in_game,mous_pos,color):
