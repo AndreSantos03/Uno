@@ -107,11 +107,9 @@ def beggining_menu():
         clock.tick(global_variables.FPS)
 
         #background
-
         SCREEN.blit(background_image,background_image_rect)
 
         #event listeners
-
         left_mouse_pressed = False
         event_list = pygame.event.get()
         for event in event_list:

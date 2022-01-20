@@ -18,6 +18,7 @@ RETRO_FONT = os.path.join(GAME_FOLDER,'Retro Gaming.ttf')
 LEFT_ARROW = os.path.join(UI_FOLDER,'Left Arrow.png')
 RIGHT_ARROW = os.path.join(UI_FOLDER,'Right Arrow.png')
 CLOSE_SIGN = os.path.join(UI_FOLDER,'X Sign.png')
+UNO_BUTTON = os.path.join(UI_FOLDER,'Uno Button.png')
 
 PAUSE_TIMER = 1
 
@@ -39,6 +40,8 @@ SKIP_SOUND = pygame.mixer.Sound(os.path.join(SOUND_FOLDER,'Skip.mp3'))
 DRAW_2_SOUND = pygame.mixer.Sound(os.path.join(SOUND_FOLDER,'Draw 2.mp3'))
 DRAW_4_SOUND = pygame.mixer.Sound(os.path.join(SOUND_FOLDER,'Draw 4.mp3'))
 WOW_SOUND = pygame.mixer.Sound(os.path.join(SOUND_FOLDER,'Wow.mp3'))
+RAINMAKER_SOUND = pygame.mixer.Sound(os.path.join(SOUND_FOLDER,'RainMaker.mp3'))
+NO_SOUND = pygame.mixer.Sound(os.path.join(SOUND_FOLDER,'No.mp3'))
 
 with open(SETTINGS,'r') as read_json:
     JSON_DATA = json.load(read_json)
