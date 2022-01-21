@@ -1,4 +1,6 @@
 import json
+from threading import Timer
+from tkinter import N
 from turtle import width
 import pygame
 from pygame.constants import MOUSEBUTTONDOWN
@@ -6,6 +8,8 @@ import pygame.font
 import os
 import random
 import global_variables
+
+
 
 #settings handling
 
@@ -57,17 +61,30 @@ close_rect = close_img.get_rect(center=(int(global_variables.WIDTH/7),int(global
 
 #quit and retry
 retry_img = options_font.render('Retry',True,(255,255,255))
-retry_rect = retry_img.get_rect(center=(int(global_variables.WIDTH / 3 + global_variables.WIDTH / 7.25),int(global_variables.HEIGHT / 4 + global_variables.HEIGHT / 14 * 4)))
+retry_rect_menu = retry_img.get_rect(center=(int(global_variables.WIDTH / 3 + global_variables.WIDTH / 7.25),int(global_variables.HEIGHT / 4 + global_variables.HEIGHT / 14 * 4)))
 quit_img = options_font.render('Quit',True,(255,255,255))
-quit_rect = quit_img.get_rect(center=(int(global_variables.WIDTH / 3 + global_variables.WIDTH / 7.25),int(global_variables.HEIGHT / 4 + global_variables.HEIGHT / 14 * 5)))
+quit_rect_menu = quit_img.get_rect(center=(int(global_variables.WIDTH / 3 + global_variables.WIDTH / 7.25),int(global_variables.HEIGHT / 4 + global_variables.HEIGHT / 14 * 5)))
 
 #Uno button
 uno_button_img = pygame.image.load(global_variables.UNO_BUTTON)
 uno_button_img = pygame.transform.scale(uno_button_img,(int(global_variables.HEIGHT/4),int(global_variables.HEIGHT/4)))
 uno_button_rect = uno_button_img.get_rect(center=(int(global_variables.WIDTH/2),int(global_variables.HEIGHT/2)))
 
+
 #to chane the fps
 fps_changes = [30,45,60,90,120,144,165,180,240,270,300]
+
+#end game menu
+end_game_rect = pygame.Rect(0,0,int(global_variables.WIDTH/3),int(global_variables.HEIGHT/3))
+end_game_rect.center = (int(global_variables.WIDTH/2),int(global_variables.HEIGHT/2))
+result_font = pygame.font.Font(global_variables.RETRO_FONT,int(global_variables.WIDTH/19.2))
+win_img = result_font.render("You Win!",True,(255,255,255))
+win_rect = win_img.get_rect(center=(int(global_variables.WIDTH/2),int(global_variables.HEIGHT/3)))
+lost_img = result_font.render("You Loose!",True,(255,255,255))
+lost_rect = win_img.get_rect(center=(int(global_variables.WIDTH/2),int(global_variables.HEIGHT/3)))
+retry_rect_end = retry_img.get_rect(center=(int(global_variables.WIDTH/2 - global_variables.WIDTH/12),int(global_variables.HEIGHT/1.8)))
+quit_rect_end = quit_img.get_rect(center=(int(global_variables.WIDTH/2 + global_variables.WIDTH/12),int(global_variables.HEIGHT/1.8)))
+
 
 #functions
 
@@ -113,31 +130,61 @@ def show_color_chooser(mos_pos,screen):
         return 0,'player','d'
 
 
-def pop_up_animation(screen,animation):
+def pop_up_animation(screen,animation,sound):
     animation_font = pygame.font.Font(global_variables.RETRO_FONT,int(global_variables.WIDTH/9.6))
     choosing_color_font = pygame.font.Font(global_variables.RETRO_FONT,int(global_variables.WIDTH/16))
     if animation == 'draw 2':
         animation_text = animation_font.render("Draw 2!",True,(255,255,255))
+        if not sound:
+            global_variables.DRAW_2_SOUND.set_volume(global_variables.EFFECTS_VOLUME)
+            global_variables.DRAW_2_SOUND.play()
     elif animation == 'reverse':
         animation_text = animation_font.render("Reverse!",True,(255,255,255))
+        if not sound:
+            global_variables.REVERSE_SOUND.set_volume(global_variables.EFFECTS_VOLUME)
+            global_variables.REVERSE_SOUND.play()
     elif animation == 'skip':
         animation_text = animation_font.render("Skip!",True,(255,255,255))
+        if not sound:
+            global_variables.SKIP_SOUND.set_volume(global_variables.EFFECTS_VOLUME)
+            global_variables.SKIP_SOUND.play()
     elif animation == 'yellow':
         animation_text = animation_font.render("Yellow!",True,(255,255,255))
+        if not sound:
+            global_variables.YELLOW_SOUND.set_volume(global_variables.EFFECTS_VOLUME)
+            global_variables.YELLOW_SOUND.play()
     elif animation == 'red':
         animation_text = animation_font.render("Red!",True,(255,255,255))
+        if not sound:
+            global_variables.RED_SOUND.set_volume(global_variables.EFFECTS_VOLUME)
+            global_variables.RED_SOUND.play()
     elif animation == 'blue':
         animation_text = animation_font.render("Blue!",True,(255,255,255))
+        if not sound:
+            global_variables.BLUE_SOUND.set_volume(global_variables.EFFECTS_VOLUME)
+            global_variables.BLUE_SOUND.play()
     elif animation == 'green':
         animation_text = animation_font.render("Green!",True,(255,255,255))
+        if not sound:
+            global_variables.GREEN_SOUND.set_volume(global_variables.EFFECTS_VOLUME)
+            global_variables.GREEN_SOUND.play()
     elif animation == 'draw cards':
         animation_text = animation_font.render("Draw Cards!",True,(255,255,255))
+        if not sound:
+            global_variables.DRAW_CARDS_ANNOUNCER_SOUND.set_volume(global_variables.EFFECTS_VOLUME)
+            global_variables.DRAW_CARDS_ANNOUNCER_SOUND.play()
     elif animation == 'uno cpu':
         animation_text = animation_font.render("UNO!",True,(255,255,255))
+        if not sound:
+            global_variables.UNO_SOUND.set_volume(global_variables.EFFECTS_VOLUME)
+            global_variables.UNO_SOUND.play()
     elif animation == 'color chooser cpu':
         animation_text = choosing_color_font.render("CPU is choosing a color...",True,(255,255,255))
     elif animation == 'draw 4':
         animation_text = choosing_color_font.render("Draw 4!",True,(255,255,255))
+        if not sound:
+            global_variables.DRAW_4_SOUND.set_volume(global_variables.EFFECTS_VOLUME)
+            global_variables.DRAW_4_SOUND.play()
     
     animation_rect = animation_text.get_rect(center = (global_variables.WIDTH/2,global_variables.HEIGHT/2))
     screen.blit(animation_text,animation_rect)
@@ -286,7 +333,7 @@ def main_game_loop():
     legal_player_deck = False
 
     while not legal_player_deck:
-        temp_deck = draw_cards(7,deck_shuffle)
+        temp_deck = draw_cards(2,deck_shuffle)
         for temp_card in temp_deck:
             if is_playable_logic(temp_card,deck_in_game[0],game_color):
                 legal_player_deck = True
@@ -300,7 +347,7 @@ def main_game_loop():
     latest_animation = None
     draw_cards_sound_played = False
     uno_cpu_said = False
-    uno_player_said = False
+    sound_played = False
 
     test_rec_score_upper = UI(int(global_variables.WIDTH/8),int(global_variables.HEIGHT/15),False)
     test_rec_score_lower = UI(int(global_variables.WIDTH/8),int(global_variables.HEIGHT  * 0.8),True)
@@ -323,6 +370,8 @@ def main_game_loop():
     hold_on_timer = 0
     animation_timer = 0
     last_tick_frame = 0
+    uno_timer = 0
+    game_end = False
     run = True
     menu_up = False
     uno_time = False
@@ -338,7 +387,9 @@ def main_game_loop():
             delta_time = (tick - last_tick_frame) / 1000
             last_tick_frame = tick
             hold_on_timer -= delta_time
-            animation_timer -= delta_time
+            uno_timer -= delta_time
+            if not uno_time:
+                animation_timer -= delta_time
 
         #background image
 
@@ -362,146 +413,155 @@ def main_game_loop():
 
         #updates and played_card_logic
 
-        #check for win
-
-        #check if deck needs to be replaced
-
-        if len(deck_shuffle) <= 4:
-            for n in range(len(deck_in_game) -1):
-                deck_shuffle.append(deck_in_game.pop(0))
-            random.shuffle(deck_shuffle)
-
-        #resets the played card
+        #reset latest played card
         played_card = None
 
+        #check for win
+        if len(deck_player) == 0:
+            game_end = True
+            play_turn = 'player'
+            global_variables.RAINMAKER_SOUND.set_volume(global_variables.EFFECTS_VOLUME)
+            global_variables.RAINMAKER_SOUND.play()
+        elif len(deck_cpu) == 0:
+            game_end = True
+            play_turn = 'player'
+            global_variables.NO_SOUND.set_volume(global_variables.EFFECTS_VOLUME)
+            global_variables.NO_SOUND.play()
 
-        if menu_up:
-            if left_mouse_pressed:
-                if left_arrow_rect_1.collidepoint(mouse_position) and global_variables.MUSIC_VOLUME > 0:
-                    global_variables.MENU_SOUND.play()
-                    global_variables.MUSIC_VOLUME = round(global_variables.MUSIC_VOLUME - 0.1,1)
-                    global_variables.JSON_DATA['music_volume'] = global_variables.MUSIC_VOLUME
-                    with open(global_variables.SETTINGS,'w') as dump_json:
-                        json.dump(global_variables.JSON_DATA,dump_json)
-                    pygame.mixer.music.set_volume(global_variables.MUSIC_VOLUME)
-                elif right_arrow_rect_1.collidepoint(mouse_position) and global_variables.MUSIC_VOLUME < 1:
-                    global_variables.MENU_SOUND.play()
-                    global_variables.MUSIC_VOLUME = round(global_variables.MUSIC_VOLUME + 0.1,1)
-                    global_variables.JSON_DATA['music_volume'] = global_variables.MUSIC_VOLUME
-                    with open(global_variables.SETTINGS,'w') as dump_json:
-                        json.dump(global_variables.JSON_DATA,dump_json)
-                    pygame.mixer.music.set_volume(global_variables.MUSIC_VOLUME)
-                elif left_arrow_rect_2.collidepoint(mouse_position) and global_variables.EFFECTS_VOLUME > 0:
-                    global_variables.MENU_SOUND.play()
-                    global_variables.EFFECTS_VOLUME = round(global_variables.EFFECTS_VOLUME - 0.1,1)
-                    global_variables.JSON_DATA['effects_volume'] = global_variables.EFFECTS_VOLUME
-                    with open(global_variables.SETTINGS,'w') as dump_json:
-                        json.dump(global_variables.JSON_DATA,dump_json)
-                elif right_arrow_rect_2.collidepoint(mouse_position) and global_variables.EFFECTS_VOLUME < 1:
-                    global_variables.MENU_SOUND.play()
-                    global_variables.EFFECTS_VOLUME = round(global_variables.EFFECTS_VOLUME + 0.1,1)
-                    global_variables.JSON_DATA['effects_volume'] = global_variables.EFFECTS_VOLUME
-                    with open(global_variables.SETTINGS,'w') as dump_json:
-                        json.dump(global_variables.JSON_DATA,dump_json)
-                elif left_arrow_rect_3.collidepoint(mouse_position) and global_variables.FPS > 30:
-                    global_variables.MENU_SOUND.play()
-                    index_fps = fps_changes.index(global_variables.FPS)
-                    global_variables.FPS = fps_changes[index_fps - 1]
-                    global_variables.JSON_DATA['fps'] = global_variables.FPS
-                    with open(global_variables.SETTINGS,'w') as dump_json:
-                        json.dump(global_variables.JSON_DATA,dump_json)
-                elif right_arrow_rect_3.collidepoint(mouse_position) and global_variables.FPS < 300:
-                    global_variables.MENU_SOUND.play()
-                    index_fps = fps_changes.index(global_variables.FPS)
-                    global_variables.FPS = fps_changes[index_fps + 1]
-                    global_variables.JSON_DATA['fps'] = global_variables.FPS
-                    with open(global_variables.SETTINGS,'w') as dump_json:
-                        json.dump(global_variables.JSON_DATA,dump_json)
-                elif close_rect.collidepoint(mouse_position):
-                    global_variables.MENU_SOUND.play()
-                    menu_up = False
-                elif quit_rect.collidepoint(mouse_position):
-                    return 0
+        if not game_end:
+            #check if deck needs to be replaced
+            if len(deck_shuffle) <= 4:
+                for n in range(len(deck_in_game) -1):
+                    deck_shuffle.append(deck_in_game.pop(0))
+                random.shuffle(deck_shuffle)
 
-                #update values
-                m_volume_value_img = options_font.render("{}".format(int(global_variables.MUSIC_VOLUME * 100)),True,(255,255,255))
-                effects_volume_value_img = options_font.render("{}".format(int(global_variables.EFFECTS_VOLUME * 100)),True,(255,255,255))
-                fps_value_image = options_font.render("{}".format(global_variables.FPS),True,(255,255,255))
-        
-        else:
+            if menu_up:
+                if left_mouse_pressed:
+                    if left_arrow_rect_1.collidepoint(mouse_position) and global_variables.MUSIC_VOLUME > 0:
+                        global_variables.MENU_SOUND.play()
+                        global_variables.MUSIC_VOLUME = round(global_variables.MUSIC_VOLUME - 0.1,1)
+                        global_variables.JSON_DATA['music_volume'] = global_variables.MUSIC_VOLUME
+                        with open(global_variables.SETTINGS,'w') as dump_json:
+                            json.dump(global_variables.JSON_DATA,dump_json)
+                        pygame.mixer.music.set_volume(global_variables.MUSIC_VOLUME)
+                    elif right_arrow_rect_1.collidepoint(mouse_position) and global_variables.MUSIC_VOLUME < 1:
+                        global_variables.MENU_SOUND.play()
+                        global_variables.MUSIC_VOLUME = round(global_variables.MUSIC_VOLUME + 0.1,1)
+                        global_variables.JSON_DATA['music_volume'] = global_variables.MUSIC_VOLUME
+                        with open(global_variables.SETTINGS,'w') as dump_json:
+                            json.dump(global_variables.JSON_DATA,dump_json)
+                        pygame.mixer.music.set_volume(global_variables.MUSIC_VOLUME)
+                    elif left_arrow_rect_2.collidepoint(mouse_position) and global_variables.EFFECTS_VOLUME > 0:
+                        global_variables.MENU_SOUND.play()
+                        global_variables.EFFECTS_VOLUME = round(global_variables.EFFECTS_VOLUME - 0.1,1)
+                        global_variables.JSON_DATA['effects_volume'] = global_variables.EFFECTS_VOLUME
+                        with open(global_variables.SETTINGS,'w') as dump_json:
+                            json.dump(global_variables.JSON_DATA,dump_json)
+                    elif right_arrow_rect_2.collidepoint(mouse_position) and global_variables.EFFECTS_VOLUME < 1:
+                        global_variables.MENU_SOUND.play()
+                        global_variables.EFFECTS_VOLUME = round(global_variables.EFFECTS_VOLUME + 0.1,1)
+                        global_variables.JSON_DATA['effects_volume'] = global_variables.EFFECTS_VOLUME
+                        with open(global_variables.SETTINGS,'w') as dump_json:
+                            json.dump(global_variables.JSON_DATA,dump_json)
+                    elif left_arrow_rect_3.collidepoint(mouse_position) and global_variables.FPS > 30:
+                        global_variables.MENU_SOUND.play()
+                        index_fps = fps_changes.index(global_variables.FPS)
+                        global_variables.FPS = fps_changes[index_fps - 1]
+                        global_variables.JSON_DATA['fps'] = global_variables.FPS
+                        with open(global_variables.SETTINGS,'w') as dump_json:
+                            json.dump(global_variables.JSON_DATA,dump_json)
+                    elif right_arrow_rect_3.collidepoint(mouse_position) and global_variables.FPS < 300:
+                        global_variables.MENU_SOUND.play()
+                        index_fps = fps_changes.index(global_variables.FPS)
+                        global_variables.FPS = fps_changes[index_fps + 1]
+                        global_variables.JSON_DATA['fps'] = global_variables.FPS
+                        with open(global_variables.SETTINGS,'w') as dump_json:
+                            json.dump(global_variables.JSON_DATA,dump_json)
+                    elif close_rect.collidepoint(mouse_position):
+                        global_variables.MENU_SOUND.play()
+                        menu_up = False
+                    elif quit_rect_menu.collidepoint(mouse_position):
+                        return 0
 
-            #checks if there's a possible play, and then processes an eventual click
-            if game_color != 'd':
-                if check_for_possible_moves(play_turn,deck_player,deck_cpu,deck_in_game,game_color):
-                    if play_turn == 'player': #player logic
-                        if left_mouse_pressed:
-                            for card_player in deck_player:
-                                if card_player.is_clicked(deck_in_game,mouse_position,game_color):
-                                    played_card = card_player
-                                    hold_on_timer = global_variables.PAUSE_TIMER
-                                    uno_cpu_said = False
-                                    if len(deck_player) == 2:
-                                        global_variables.UNO_SOUND.set_volume(global_variables.EFFECTS_VOLUME)
-                                        global_variables.UNO_SOUND.play()
-
-
-                    #CPU Logic            
-                    elif play_turn == 'cpu' and game_color != 'd' and hold_on_timer < 0 and not menu_up:
-                        highest_card = None
-                        highest_rating = 0
-                        for card_cpu in deck_cpu:
-                            card_rating = 0 #1 for black cards, 2 for different colors same numbers, 3 for numbers of same colors, 4 for special cards of same color
-                            if card_cpu.color == game_color and card_cpu.type in ['10','11','12']:
-                                card_rating = 4
-                            elif card_cpu.color == game_color and card_cpu.type in ['00','01','02','03','04','05','06','07','08','09']:
-                                card_rating = 3
-                            elif card_cpu.type == deck_in_game[-1].type:
-                                card_rating = 2
-                            elif card_cpu.color == 'd':
-                                card_rating = 1
-                            if card_rating > highest_rating:
-                                highest_card = card_cpu
-                                highest_rating = card_rating
-                        hold_on_timer = global_variables.PAUSE_TIMER
-                        played_card = highest_card
-                        
-                        if len(deck_cpu) == 2 and animation_timer < 0 and not uno_cpu_said and not check_for_possible_moves(play_turn,deck_player,deck_cpu,deck_in_game,game_color):
-                            hold_on_timer = global_variables.PAUSE_TIMER
-                            animation_timer = global_variables.PAUSE_TIMER
-                            latest_animation = 'uno cpu'
-                            uno_cpu_said = True
-                            global_variables.UNO_SOUND.set_volume(global_variables.EFFECTS_VOLUME)
-                            global_variables.UNO_SOUND.play()
+                    #update values
+                    m_volume_value_img = options_font.render("{}".format(int(global_variables.MUSIC_VOLUME * 100)),True,(255,255,255))
+                    effects_volume_value_img = options_font.render("{}".format(int(global_variables.EFFECTS_VOLUME * 100)),True,(255,255,255))
+                    fps_value_image = options_font.render("{}".format(global_variables.FPS),True,(255,255,255))
             
-                else:
-                    if not draw_cards_sound_played and animation_timer < 0:
-                        global_variables.DRAW_CARDS_ANNOUNCER_SOUND.set_volume(global_variables.EFFECTS_VOLUME)
-                        global_variables.DRAW_CARDS_ANNOUNCER_SOUND.play()
-                        latest_animation = "draw cards"
-                        animation_timer = global_variables.PAUSE_TIMER
-                        draw_cards_sound_played = True
-                    #player can draw through the function
-                    draw_card_animation(play_turn,deck_player,mouse_position,left_mouse_pressed,deck_shuffle,SCREEN)
-                    #cpu drawing cards
-                    if play_turn == 'cpu' and hold_on_timer < 0:
-                        deck_cpu.append(draw_cards(1,deck_shuffle))
-                        hold_on_timer = global_variables.PAUSE_TIMER / 2
-                        global_variables.DRAWN_CARD_SOUND.set_volume(global_variables.EFFECTS_VOLUME)
-                        global_variables.DRAWN_CARD_SOUND.play()
+            else:
+                #checks if there's a possible play, and then processes an eventual click
+                if game_color != 'd':
+                    if check_for_possible_moves(play_turn,deck_player,deck_cpu,deck_in_game,game_color):
+                        if play_turn == 'player': #player logic
+                            if left_mouse_pressed:
+                                sound_played = False
+                                for card_player in deck_player:
+                                    if card_player.is_clicked(deck_in_game,mouse_position,game_color):
+                                        played_card = card_player
+                                        hold_on_timer = global_variables.PAUSE_TIMER
+                                        uno_cpu_said = False
 
-            #Card is played logic
-            if not played_card == None:
-                #reset variable                
-                draw_cards_sound_played = False
-                if play_turn == 'player':
-                    deck_player.remove(played_card)
-                    deck_in_game.append(played_card)
-                else:
-                    deck_cpu.remove(played_card)
-                    deck_in_game.append(played_card)
-                if len(deck_player) == 1 and not uno_time and play_turn == 'player':
-                    uno_time = True
-                if not uno_time:
+
+
+                        #CPU Logic            
+                        elif play_turn == 'cpu' and game_color != 'd' and hold_on_timer < 0 and animation_timer < 0 and not menu_up and not uno_time:
+                            sound_played = False
+                            highest_card = None
+                            highest_rating = 0
+                            for card_cpu in deck_cpu:
+                                card_rating = 0 #1 for black cards, 2 for different colors same numbers, 3 for numbers of same colors, 4 for special cards of same color
+                                if card_cpu.color == game_color and card_cpu.type in ['10','11','12']:
+                                    card_rating = 4
+                                elif card_cpu.color == game_color and card_cpu.type in ['00','01','02','03','04','05','06','07','08','09']:
+                                    card_rating = 3
+                                elif card_cpu.type == deck_in_game[-1].type:
+                                    card_rating = 2
+                                elif card_cpu.color == 'd':
+                                    card_rating = 1
+                                if card_rating > highest_rating:
+                                    highest_card = card_cpu
+                                    highest_rating = card_rating
+                            hold_on_timer = global_variables.PAUSE_TIMER
+                            played_card = highest_card
+                            
+                            if len(deck_cpu) == 2 and animation_timer < 0 and not uno_cpu_said and not check_for_possible_moves(play_turn,deck_player,deck_cpu,deck_in_game,game_color):
+                                hold_on_timer = global_variables.PAUSE_TIMER
+                                animation_timer = global_variables.PAUSE_TIMER
+                                latest_animation = 'uno cpu'
+                                uno_cpu_said = True
+                                global_variables.UNO_SOUND.set_volume(global_variables.EFFECTS_VOLUME)
+                                global_variables.UNO_SOUND.play()
+
+                    else:
+                        if not draw_cards_sound_played and animation_timer < 0:
+                            latest_animation = "draw cards"
+                            animation_timer = global_variables.PAUSE_TIMER
+                            draw_cards_sound_played = True
+                        #player can draw through the function
+                        draw_card_animation(play_turn,deck_player,mouse_position,left_mouse_pressed,deck_shuffle,SCREEN)
+                        #cpu drawing cards
+                        if play_turn == 'cpu' and hold_on_timer < 0:
+                            deck_cpu.append(draw_cards(1,deck_shuffle))
+                            hold_on_timer = global_variables.PAUSE_TIMER / 2
+                            global_variables.DRAWN_CARD_SOUND.set_volume(global_variables.EFFECTS_VOLUME)
+                            global_variables.DRAWN_CARD_SOUND.play()
+
+                #Card is played logic
+                if played_card != None:
+                    #in case there's player uno
+                    if len(deck_player) == 2 and play_turn == 'player' and not uno_time: 
+                        uno_time = True
+                        uno_timer = 2
+                    #reset variable                
+                    draw_cards_sound_played = False
+                    #deal with turns
+                    if play_turn == 'player':
+                        deck_player.remove(played_card)
+                        deck_in_game.append(played_card)
+                    else:
+                        deck_cpu.remove(played_card)
+                        deck_in_game.append(played_card)
+                    #deal with cards played
                     if played_card.type in ['00','01','02','03','04','05','06','07','08','09']:
                         if play_turn == 'player':
                             play_turn = 'cpu'
@@ -517,13 +577,9 @@ def main_game_loop():
                             play_turn = 'player'
                         game_color = played_card.color
                         latest_animation = 'draw 2'
-                        global_variables.DRAW_2_SOUND.set_volume(global_variables.EFFECTS_VOLUME)
-                        global_variables.DRAW_2_SOUND.play()
                         animation_timer = global_variables.PAUSE_TIMER
                     elif played_card.type == '13':
                         game_color = played_card.color
-                        global_variables.WOW_SOUND.set_volume(global_variables.EFFECTS_VOLUME)
-                        global_variables.WOW_SOUND.play() 
                     elif played_card.type == '14':
                         if play_turn == 'player':
                             deck_cpu.extend(draw_cards(4,deck_shuffle))
@@ -532,23 +588,17 @@ def main_game_loop():
                             latest_animation = 'draw 4'
                             animation_timer = global_variables.PAUSE_TIMER * 2
                         game_color = played_card.color
-                        global_variables.DRAW_4_SOUND.set_volume(global_variables.EFFECTS_VOLUME)
-                        global_variables.DRAW_4_SOUND.play()
                     else: #for the stop and turn signals, which both work the same
                         game_color = played_card.color
                         #differentiate both animations
                         if played_card.type == "10":
                             latest_animation = 'skip'
-                            global_variables.SKIP_SOUND.set_volume(global_variables.EFFECTS_VOLUME)
-                            global_variables.SKIP_SOUND.play()
                         else:
                             latest_animation = 'reverse'
-                            global_variables.REVERSE_SOUND.set_volume(global_variables.EFFECTS_VOLUME)
-                            global_variables.REVERSE_SOUND.play()
                         animation_timer = global_variables.PAUSE_TIMER
-            
-                global_variables.PLAYED_CARD_SOUND.set_volume(global_variables.EFFECTS_VOLUME)
-                global_variables.PLAYED_CARD_SOUND.play()
+                
+                    global_variables.PLAYED_CARD_SOUND.set_volume(global_variables.EFFECTS_VOLUME)
+                    global_variables.PLAYED_CARD_SOUND.play()
         
         #system to draw cards (but not all draws are here)
 
@@ -631,31 +681,30 @@ def main_game_loop():
         if uno_time:
             SCREEN.blit(transparent_surface,(0,0))
             SCREEN.blit(uno_button_img,uno_button_rect)
-            uno_timer = 3
+            hold_on_timer
             if left_mouse_pressed and uno_button_rect.collidepoint(mouse_position):
                 global_variables.UNO_SOUND.set_volume(global_variables.EFFECTS_VOLUME)
                 global_variables.UNO_SOUND.play()
                 uno_time = False
-                play_turn = 'cpu'
-                animation_timer = global_variables.PAUSE_TIMER
-            elif hold_on_timer < 0:
+            elif uno_timer < 0:
                 global_variables.DRAW_2_SOUND.set_volume(global_variables.EFFECTS_VOLUME)
                 global_variables.DRAW_2_SOUND.play()
                 deck_player.extend(draw_cards(2,deck_shuffle))
                 uno_time = False
-                play_turn = 'cpu'
-                animation_timer = global_variables.PAUSE_TIMER
+                hold_on_timer = global_variables.PAUSE_TIMER
+                uno_timer = global_variables.PAUSE_TIMER
 
         #draw animations
-        elif animation_timer >= 0:
+        elif animation_timer >= 0 and uno_timer < 0:
             #draw 4 has some special effects
             if latest_animation == 'draw 4' and play_turn == 'cpu':
                 if animation_timer >= global_variables.PAUSE_TIMER:
-                    pop_up_animation(SCREEN,'draw 4')
+                    pop_up_animation(SCREEN,'draw 4',sound_played)
                 else:
-                    pop_up_animation(SCREEN,'color chooser cpu')
+                    pop_up_animation(SCREEN,'color chooser cpu',sound_played)
             else:
-                pop_up_animation(SCREEN,latest_animation)
+                pop_up_animation(SCREEN,latest_animation,sound_played)
+            sound_played = True
         
         #menu animations
         if menu_up:
@@ -678,8 +727,18 @@ def main_game_loop():
             SCREEN.blit(left_arrow,left_arrow_rect_3)
             SCREEN.blit(right_arrow,right_arrow_rect_3)
             SCREEN.blit(close_img,close_rect)
-            SCREEN.blit(quit_img,quit_rect)
-            SCREEN.blit(retry_img,retry_rect)
+            SCREEN.blit(quit_img,quit_rect_menu)
+            SCREEN.blit(retry_img,retry_rect_menu)
+        elif game_end:
+            SCREEN.blit(transparent_surface,(0,0))
+            pygame.draw.rect(SCREEN,(255,163,1),end_game_rect)
+            if play_turn == 'player':
+                SCREEN.blit(win_img,win_rect)
+            else:
+                SCREEN.blit(lost_img,lost_rect)
+            SCREEN.blit(retry_img,retry_rect_end)
+            SCREEN.blit(quit_img,quit_rect_end)
+
         else:
             SCREEN.blit(settings_img,settings_rect)
             if left_mouse_pressed and settings_rect.collidepoint(mouse_position):
