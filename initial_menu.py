@@ -1,5 +1,4 @@
 import json
-from turtle import width
 import pygame
 import global_variables
 from pygame.constants import MOUSEBUTTONDOWN
@@ -56,7 +55,7 @@ fps_rect = resolution_options_img.get_rect(center=(int(global_variables.WIDTH / 
 fps_value_image = options_font.render("{}".format(global_variables.FPS),True,(255,255,255))
 fps_value_rect = fps_value_image.get_rect(center = (int(global_variables.WIDTH / 3 + global_variables.WIDTH / 4.8),int(global_variables.HEIGHT / 4 + global_variables.HEIGHT / 14 * 3)))
 left_arrow_rect_3 = left_arrow.get_rect(center=(int(global_variables.WIDTH / 3 + global_variables.WIDTH / 9),int(global_variables.HEIGHT / 4 + global_variables.HEIGHT / 14 * 3)))
-right_arrow_rect_3 = right_arrow.get_rect(center=(int(global_variables.WIDTH / 3 + global_variables.WIDTH / 6),int(global_variables.HEIGHT / 4 + + global_variables.HEIGHT / 14 * 3)))
+right_arrow_rect_3 = right_arrow.get_rect(center=(int(global_variables.WIDTH / 3 + global_variables.WIDTH / 6),int(global_variables.HEIGHT / 4 + global_variables.HEIGHT / 14 * 3)))
 
 #close sign
 x_font = pygame.font.Font(global_variables.RETRO_FONT,int(global_variables.WIDTH/38.4))
@@ -130,14 +129,14 @@ def beggining_menu():
                 global_variables.MENU_SOUND.set_volume(global_variables.EFFECTS_VOLUME)
                 if quit_rect.collidepoint(mouse_position) and not menu_up:
                     global_variables.MENU_SOUND.play()
-                    return 0
+                    return False
                 elif settings_rect.collidepoint(mouse_position) and not menu_up:
                     global_variables.MENU_SOUND.play()
                     menu_up = True
                 elif play_rect.collidepoint(mouse_position) and not menu_up:
                     global_variables.MENU_SOUND.play()
                     loading_image(SCREEN)
-                    return 1
+                    return True
                 if menu_up:
                     if left_arrow_rect_1.collidepoint(mouse_position) and global_variables.MUSIC_VOLUME > 0:
                         global_variables.MENU_SOUND.play()
