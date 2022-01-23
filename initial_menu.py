@@ -63,7 +63,7 @@ close_img = x_font.render('X',True,(255,255,255))
 close_rect = close_img.get_rect(center=(int(global_variables.WIDTH/7),int(global_variables.HEIGHT/6.4)))
 
 #to chane the fps
-fps_changes = [30,45,60,90,120,144,165,180,240,270,300]
+fps_changes = [30,45,60,90,120,144]
 
 def loading_image(screen):
 
@@ -126,70 +126,77 @@ def beggining_menu():
             #click handleer
             mouse_position = pygame.mouse.get_pos()
             if left_mouse_pressed:
+                menu_sound = False
                 global_variables.MENU_SOUND.set_volume(global_variables.EFFECTS_VOLUME)
                 if quit_rect.collidepoint(mouse_position) and not menu_up:
                     global_variables.MENU_SOUND.play()
+                    menu_sound = True
                     return False
                 elif settings_rect.collidepoint(mouse_position) and not menu_up:
                     global_variables.MENU_SOUND.play()
                     menu_up = True
+                    menu_sound = True
                 elif play_rect.collidepoint(mouse_position) and not menu_up:
                     global_variables.MENU_SOUND.play()
                     loading_image(SCREEN)
+                    menu_sound = True
                     return True
                 if menu_up:
                     if left_arrow_rect_1.collidepoint(mouse_position) and global_variables.MUSIC_VOLUME > 0:
-                        global_variables.MENU_SOUND.play()
                         global_variables.MUSIC_VOLUME = round(global_variables.MUSIC_VOLUME - 0.1,1)
                         global_variables.JSON_DATA['music_volume'] = global_variables.MUSIC_VOLUME
                         with open(global_variables.SETTINGS,'w') as dump_json:
                             json.dump(global_variables.JSON_DATA,dump_json)
                         pygame.mixer.music.set_volume(global_variables.MUSIC_VOLUME)
+                        menu_sound = True
                     elif right_arrow_rect_1.collidepoint(mouse_position) and global_variables.MUSIC_VOLUME < 1:
-                        global_variables.MENU_SOUND.play()
                         global_variables.MUSIC_VOLUME = round(global_variables.MUSIC_VOLUME + 0.1,1)
                         global_variables.JSON_DATA['music_volume'] = global_variables.MUSIC_VOLUME
                         with open(global_variables.SETTINGS,'w') as dump_json:
                             json.dump(global_variables.JSON_DATA,dump_json)
                         pygame.mixer.music.set_volume(global_variables.MUSIC_VOLUME)
+                        menu_sound = True
                     elif left_arrow_rect_2.collidepoint(mouse_position) and global_variables.EFFECTS_VOLUME > 0:
-                        global_variables.MENU_SOUND.play()
                         global_variables.EFFECTS_VOLUME = round(global_variables.EFFECTS_VOLUME - 0.1,1)
                         global_variables.JSON_DATA['effects_volume'] = global_variables.EFFECTS_VOLUME
                         with open(global_variables.SETTINGS,'w') as dump_json:
                             json.dump(global_variables.JSON_DATA,dump_json)
+                        menu_sound = True
                     elif right_arrow_rect_2.collidepoint(mouse_position) and global_variables.EFFECTS_VOLUME < 1:
-                        global_variables.MENU_SOUND.play()
                         global_variables.EFFECTS_VOLUME = round(global_variables.EFFECTS_VOLUME + 0.1,1)
                         global_variables.JSON_DATA['effects_volume'] = global_variables.EFFECTS_VOLUME
                         with open(global_variables.SETTINGS,'w') as dump_json:
                             json.dump(global_variables.JSON_DATA,dump_json)
+                        menu_sound = True
                     elif left_arrow_rect_3.collidepoint(mouse_position) and global_variables.FPS > 30:
-                        global_variables.MENU_SOUND.play()
                         index_fps = fps_changes.index(global_variables.FPS)
                         global_variables.FPS = fps_changes[index_fps - 1]
                         global_variables.JSON_DATA['fps'] = global_variables.FPS
                         with open(global_variables.SETTINGS,'w') as dump_json:
                             json.dump(global_variables.JSON_DATA,dump_json)
-                    elif right_arrow_rect_3.collidepoint(mouse_position) and global_variables.FPS < 300:
-                        global_variables.MENU_SOUND.play()
+                        menu_sound = True
+                    elif right_arrow_rect_3.collidepoint(mouse_position) and global_variables.FPS < 144:
                         index_fps = fps_changes.index(global_variables.FPS)
                         global_variables.FPS = fps_changes[index_fps + 1]
                         global_variables.JSON_DATA['fps'] = global_variables.FPS
                         with open(global_variables.SETTINGS,'w') as dump_json:
                             json.dump(global_variables.JSON_DATA,dump_json)
+                        menu_sound = True
                     elif close_rect.collidepoint(mouse_position):
-                        global_variables.MENU_SOUND.play()
                         menu_up = False
+                        menu_sound = True
                 else:
                     global_variables.MENU_SOUND.set_volume(global_variables.EFFECTS_VOLUME)
                     if quit_rect.collidepoint(mouse_position) and not menu_up:
+                        menu_sound = True
                         global_variables.MENU_SOUND.play()
                         return 0
                     elif settings_rect.collidepoint(mouse_position) and not menu_up:
-                        global_variables.MENU_SOUND.play()
+                        global_variables.MENU_SOUND.set_volume(global_variables.EFFECTS_VOLUME)
                         menu_up = True
+                        menu_sound = True
                     elif play_rect.collidepoint(mouse_position) and not menu_up:
+                        global_variables.MENU_SOUND.set_volume(global_variables.EFFECTS_VOLUME)
                         global_variables.MENU_SOUND.play()
                         loading_image(SCREEN)
                         return 1
@@ -199,7 +206,9 @@ def beggining_menu():
                 effects_volume_value_img = options_font.render("{}".format(int(global_variables.EFFECTS_VOLUME * 100)),True,(255,255,255))
                 fps_value_image = options_font.render("{}".format(global_variables.FPS),True,(255,255,255))
                                
-
+                if menu_sound: 
+                    global_variables.MENU_SOUND.set_volume(global_variables.EFFECTS_VOLUME)
+                    global_variables.MENU_SOUND.play()
         #draw all the visual part
 
         #Buttons
