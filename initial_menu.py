@@ -37,10 +37,10 @@ percentage_sign_image = options_font.render("%",True,(255,255,255))
 percentage_sign_rect_1 = resolution_options_img.get_rect(center=(int(global_variables.WIDTH / 3 + global_variables.WIDTH / 3.75),int(global_variables.HEIGHT / 4 + global_variables.HEIGHT / 14)))
 m_volume_value_img = options_font.render("{}".format(global_variables.MUSIC_VOLUME * 100),True,(255,255,255))
 m_volume_value_rect = m_volume_value_img.get_rect(center = (int(global_variables.WIDTH / 3 + global_variables.WIDTH / 4.8),int(global_variables.HEIGHT / 4 + global_variables.HEIGHT / 14)))
-left_arrow = pygame.image.load(global_variables.LEFT_ARROW)
+left_arrow = global_variables.LEFT_ARROW
 left_arrow = pygame.transform.scale(left_arrow,(int(global_variables.WIDTH/20),int(global_variables.HEIGHT/30)))
 left_arrow_rect_1 = left_arrow.get_rect(center=(int(global_variables.WIDTH / 3 + global_variables.WIDTH / 9),int(global_variables.HEIGHT / 4 + global_variables.HEIGHT / 14)))
-right_arrow = pygame.image.load(global_variables.RIGHT_ARROW)
+right_arrow = global_variables.RIGHT_ARROW
 right_arrow = pygame.transform.scale(right_arrow,(int(global_variables.WIDTH/20),int(global_variables.HEIGHT/30)))
 right_arrow_rect_1 = right_arrow.get_rect(center=(int(global_variables.WIDTH / 3 + global_variables.WIDTH / 6),int(global_variables.HEIGHT / 4 + global_variables.HEIGHT / 14)))
 effects_volume_img = options_font.render("Effects Volume:",True,(255,255,255))
@@ -83,7 +83,7 @@ def beggining_menu():
 
     pygame.display.set_caption("Uno")
 
-    background_image = pygame.image.load(global_variables.BACKGROUND_IMAGE)
+    background_image = global_variables.BACKGROUND_IMAGE
     background_image = pygame.transform.scale(background_image,(global_variables.WIDTH ,global_variables.HEIGHT))
     background_image_rect = background_image.get_rect()
 
