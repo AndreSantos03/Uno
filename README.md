@@ -24,12 +24,12 @@ Link para o repositório do GitHub: https://github.com/AndreSantos03/Uno
     É um jogo de cartas conhecido por Uno. Utiliza um baralho especial e ganha quem ficar sem cartas primeiro. Neste programa, o utilizador controla um jogador, o computador controla o outro.
 ### UI
 
-![UI](https://imgur.com/a/lqBtCtG)
-![UI](https://imgur.com/a/o9JM6m1)
+![UI](UI1.png)
+![UI](UI2.png)
 
 ### Pacotes
 
 - Pygame
 
 
-- Atualizado a última vez em 23/01/2022
+Atualizado a última vez em 23/01/2022
