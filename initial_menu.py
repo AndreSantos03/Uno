@@ -115,8 +115,8 @@ def beggining_menu():
             if event.type ==  pygame.QUIT:
                 run = False
             elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_BACKSPACE:
-                    run = False
+                if event.key == pygame.K_ESCAPE:
+                    menu_up = not menu_up
             elif event.type == MOUSEBUTTONDOWN and event.button == 1:
                 left_mouse_pressed = True
 

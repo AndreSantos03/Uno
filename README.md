@@ -1,38 +1,35 @@
 # Uno
-# Projeto XXXX
+# Projeto 2021
 ## FP/L.EIC, 2021/22
-## Fulano de Tal (up2021xxxxx)
-## 1LEICXX
+## André Bernardo Ferreira Santos (up202108658)
+## 1LEIC01
 
 ### Objetivo
 
-1. Criar o jogo do Uno utilizando o pygame
+1. Criar o jogo do Uno utilizando o Pygame
+2. Utilizar classes para representar as classes
+3. Criar um UI interativo
+4. Integrar animações audiovisuais
+5. Criar um menu inicial e de fim de jogo que permite recomeçar a partida
+6. Integrar um  menu de definições, as quais são guardadas num ficheiro JSON
 
 ### Repositório de código
 
-1) Link para o repositório do GitHub: https://github.com/AndreSantos03/Uno
+Link para o repositório do GitHub: https://github.com/AndreSantos03/Uno
 
-2) Adicionar, como colaborador com permissão de leitura (*role read*):
 
-- https://github.com/AfonsoSalgadoSousa
-- https://github.com/jlopes60
-- https://github.com/nmacedo
-- https://github.com/rpmcruz
-- https://github.com/eSoares
-- https://github.com/pbv
-- https://github.com/imdcode
-- https://github.com/acoelho-fe-up-pt
 
 ### Descrição
 
-    É um jogo do uno de dois jogadores, sendo um controlado pelo utilizador e outro pelo CPU.
+    É um jogo de cartas conhecido por Uno. Utiliza um baralho especial e ganha quem ficar sem cartas primeiro. Neste programa, o utilizador controla um jogador, o computador controla o outro.
 ### UI
 
-![UI](ui.png)
+![UI](https://imgur.com/a/lqBtCtG)
+![UI](https://imgur.com/a/o9JM6m1)
 
 ### Pacotes
 
 - Pygame
 
 
-- Atualizado a última vez em 15/12/2021
+- Atualizado a última vez em 23/01/2022
