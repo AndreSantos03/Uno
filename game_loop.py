@@ -359,10 +359,10 @@ def main_game_loop():
             tick = pygame.time.get_ticks()
             delta_time = (tick - last_tick_frame) / 1000
             last_tick_frame = tick
-            hold_on_timer -= delta_time
             uno_timer -= delta_time
             if not uno_time:
                 animation_timer -= delta_time
+                hold_on_timer -= delta_time
 
         #background image
 
