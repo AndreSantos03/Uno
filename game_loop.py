@@ -1,13 +1,8 @@
-from ast import Return
 import json
-from pickle import TRUE
-
-from matplotlib import animation
 from initial_menu import loading_image
 import pygame
 from pygame.constants import MOUSEBUTTONDOWN
 import pygame.font
-import os
 import random
 import global_variables
 
