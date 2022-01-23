@@ -50,20 +50,11 @@ effects_volume_value_img = options_font.render("{}".format(int(global_variables.
 effects_volume_value_rect = m_volume_value_img.get_rect(center = (int(global_variables.WIDTH / 3 + global_variables.WIDTH / 4.8),int(global_variables.HEIGHT / 4 + global_variables.HEIGHT / 14 * 2)))
 left_arrow_rect_2 = left_arrow.get_rect(center=(int(global_variables.WIDTH / 3 + global_variables.WIDTH / 9),int(global_variables.HEIGHT / 4 + global_variables.HEIGHT / 14 * 2)))
 right_arrow_rect_2 = right_arrow.get_rect(center=(int(global_variables.WIDTH / 3 + global_variables.WIDTH / 6),int(global_variables.HEIGHT / 4 + + global_variables.HEIGHT / 14 * 2)))
-fps_image = options_font.render("FPS:",True,(255,255,255))
-fps_rect = resolution_options_img.get_rect(center=(int(global_variables.WIDTH / 3),int(global_variables.HEIGHT / 4 + global_variables.HEIGHT / 14 * 3)))
-fps_value_image = options_font.render("{}".format(global_variables.FPS),True,(255,255,255))
-fps_value_rect = fps_value_image.get_rect(center = (int(global_variables.WIDTH / 3 + global_variables.WIDTH / 4.8),int(global_variables.HEIGHT / 4 + global_variables.HEIGHT / 14 * 3)))
-left_arrow_rect_3 = left_arrow.get_rect(center=(int(global_variables.WIDTH / 3 + global_variables.WIDTH / 9),int(global_variables.HEIGHT / 4 + global_variables.HEIGHT / 14 * 3)))
-right_arrow_rect_3 = right_arrow.get_rect(center=(int(global_variables.WIDTH / 3 + global_variables.WIDTH / 6),int(global_variables.HEIGHT / 4 + global_variables.HEIGHT / 14 * 3)))
 
 #close sign
 x_font = pygame.font.Font(global_variables.RETRO_FONT,int(global_variables.WIDTH/38.4))
 close_img = x_font.render('X',True,(255,255,255))
 close_rect = close_img.get_rect(center=(int(global_variables.WIDTH/7),int(global_variables.HEIGHT/6.4)))
-
-#to chane the fps
-fps_changes = [30,45,60,90,120,144]
 
 def loading_image(screen):
 
@@ -79,9 +70,12 @@ def loading_image(screen):
     pygame.display.flip()
 
 def beggining_menu():
+    
     SCREEN = pygame.display.set_mode((global_variables.WIDTH , global_variables.HEIGHT))
 
     pygame.display.set_caption("Uno")
+    pygame.display.set_icon(global_variables.ICON) 
+
 
     background_image = global_variables.BACKGROUND_IMAGE
     background_image = pygame.transform.scale(background_image,(global_variables.WIDTH ,global_variables.HEIGHT))
@@ -168,20 +162,6 @@ def beggining_menu():
                         with open(global_variables.SETTINGS,'w') as dump_json:
                             json.dump(global_variables.JSON_DATA,dump_json)
                         menu_sound = True
-                    elif left_arrow_rect_3.collidepoint(mouse_position) and global_variables.FPS > 30:
-                        index_fps = fps_changes.index(global_variables.FPS)
-                        global_variables.FPS = fps_changes[index_fps - 1]
-                        global_variables.JSON_DATA['fps'] = global_variables.FPS
-                        with open(global_variables.SETTINGS,'w') as dump_json:
-                            json.dump(global_variables.JSON_DATA,dump_json)
-                        menu_sound = True
-                    elif right_arrow_rect_3.collidepoint(mouse_position) and global_variables.FPS < 144:
-                        index_fps = fps_changes.index(global_variables.FPS)
-                        global_variables.FPS = fps_changes[index_fps + 1]
-                        global_variables.JSON_DATA['fps'] = global_variables.FPS
-                        with open(global_variables.SETTINGS,'w') as dump_json:
-                            json.dump(global_variables.JSON_DATA,dump_json)
-                        menu_sound = True
                     elif close_rect.collidepoint(mouse_position):
                         menu_up = False
                         menu_sound = True
@@ -204,7 +184,6 @@ def beggining_menu():
                 #update values
                 m_volume_value_img = options_font.render("{}".format(int(global_variables.MUSIC_VOLUME * 100)),True,(255,255,255))
                 effects_volume_value_img = options_font.render("{}".format(int(global_variables.EFFECTS_VOLUME * 100)),True,(255,255,255))
-                fps_value_image = options_font.render("{}".format(global_variables.FPS),True,(255,255,255))
                                
                 if menu_sound: 
                     global_variables.MENU_SOUND.set_volume(global_variables.EFFECTS_VOLUME)
@@ -228,15 +207,11 @@ def beggining_menu():
             SCREEN.blit(m_volume_value_img,m_volume_value_rect)
             SCREEN.blit(effects_volume_value_img,effects_volume_value_rect)
             SCREEN.blit(effects_volume_img,effects_volume_rect)
-            SCREEN.blit(fps_image,fps_rect)
-            SCREEN.blit(fps_value_image,fps_value_rect)
             SCREEN.blit(percentage_sign_image,percentage_sign_rect_2)
             SCREEN.blit(left_arrow,left_arrow_rect_1)
             SCREEN.blit(right_arrow,right_arrow_rect_1)
             SCREEN.blit(left_arrow,left_arrow_rect_2)
             SCREEN.blit(right_arrow,right_arrow_rect_2)
-            SCREEN.blit(left_arrow,left_arrow_rect_3)
-            SCREEN.blit(right_arrow,right_arrow_rect_3)
             SCREEN.blit(close_img,close_rect)
             
         pygame.display.flip()

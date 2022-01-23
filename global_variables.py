@@ -15,6 +15,7 @@ BACKGROUND_MUSIC = os.path.join(SOUND_FOLDER,'BackMusic.mp3')
 
 BACKGROUND_IMAGE = pygame.image.load(os.path.join(UI_FOLDER,'BackGround Uno Online.png'))
 BACK_CARD_IMG = pygame.image.load(os.path.join(CARDS_FOLDER,'Back Card.png'))
+ICON = pygame.image.load(os.path.join(UI_FOLDER,'Icon.png'))
 RETRO_FONT = os.path.join(GAME_FOLDER,'Retro Gaming.ttf')
 LEFT_ARROW = pygame.image.load(os.path.join(UI_FOLDER,'Left Arrow.png'))
 RIGHT_ARROW = pygame.image.load(os.path.join(UI_FOLDER,'Right Arrow.png'))
@@ -25,8 +26,11 @@ DRAW_BUTTON =  pygame.image.load(os.path.join(UI_FOLDER,'botaodraw.png'))
 PAUSE_TIMER = 1
 
 info_screen = pygame.display.Info()
+
 HEIGHT = info_screen.current_h
 WIDTH = round(HEIGHT * 16 / 9) #to force a 16:9, i have an ultrawide and it was bugging me
+
+FPS = 30
 
 PLAYED_CARD_SOUND = pygame.mixer.Sound(os.path.join(SOUND_FOLDER,'Card placed.mp3'))
 MENU_SOUND = pygame.mixer.Sound(os.path.join(SOUND_FOLDER,'Menu Sound.mp3'))
@@ -47,7 +51,6 @@ NO_SOUND = pygame.mixer.Sound(os.path.join(SOUND_FOLDER,'No.mp3'))
 
 with open(SETTINGS,'r') as read_json:
     JSON_DATA = json.load(read_json)
-    FPS = JSON_DATA['fps']
     MUSIC_VOLUME = JSON_DATA['music_volume']
     EFFECTS_VOLUME = JSON_DATA['effects_volume']
 

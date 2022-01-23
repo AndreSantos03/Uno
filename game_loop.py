@@ -48,12 +48,6 @@ effects_volume_value_img = options_font.render("{}".format(int(global_variables.
 effects_volume_value_rect = m_volume_value_img.get_rect(center = (int(global_variables.WIDTH / 3 + global_variables.WIDTH / 4.8),int(global_variables.HEIGHT / 4 + global_variables.HEIGHT / 14 * 2)))
 left_arrow_rect_2 = left_arrow.get_rect(center=(int(global_variables.WIDTH / 3 + global_variables.WIDTH / 9),int(global_variables.HEIGHT / 4 + global_variables.HEIGHT / 14 * 2)))
 right_arrow_rect_2 = right_arrow.get_rect(center=(int(global_variables.WIDTH / 3 + global_variables.WIDTH / 6),int(global_variables.HEIGHT / 4 + + global_variables.HEIGHT / 14 * 2)))
-fps_image = options_font.render("FPS:",True,(255,255,255))
-fps_rect = resolution_options_img.get_rect(center=(int(global_variables.WIDTH / 3),int(global_variables.HEIGHT / 4 + global_variables.HEIGHT / 14 * 3)))
-fps_value_image = options_font.render("{}".format(global_variables.FPS),True,(255,255,255))
-fps_value_rect = fps_value_image.get_rect(center = (int(global_variables.WIDTH / 3 + global_variables.WIDTH / 4.8),int(global_variables.HEIGHT / 4 + global_variables.HEIGHT / 14 * 3)))
-left_arrow_rect_3 = left_arrow.get_rect(center=(int(global_variables.WIDTH / 3 + global_variables.WIDTH / 9),int(global_variables.HEIGHT / 4 + global_variables.HEIGHT / 14 * 3)))
-right_arrow_rect_3 = right_arrow.get_rect(center=(int(global_variables.WIDTH / 3 + global_variables.WIDTH / 6),int(global_variables.HEIGHT / 4 + + global_variables.HEIGHT / 14 * 3)))
 
 #close sign
 x_font = pygame.font.Font(global_variables.RETRO_FONT,int(global_variables.WIDTH/38.4))
@@ -63,18 +57,14 @@ close_rect = close_img.get_rect(center=(int(global_variables.WIDTH/7),int(global
 #quit and retry
 button_font = pygame.font.Font(global_variables.RETRO_FONT,int(global_variables.WIDTH/48))
 retry_img = button_font.render('Restart',True,(255,255,255))
-retry_rect_menu = retry_img.get_rect(center=(int(global_variables.WIDTH / 3 + global_variables.WIDTH / 7.25),int(global_variables.HEIGHT / 4 + global_variables.HEIGHT / 14 * 4.5)))
+retry_rect_menu = retry_img.get_rect(center=(int(global_variables.WIDTH / 3 + global_variables.WIDTH / 7.25),int(global_variables.HEIGHT / 4 + global_variables.HEIGHT / 14 * 3.5)))
 quit_img = button_font.render('Quit',True,(255,255,255))
-quit_rect_menu = quit_img.get_rect(center=(int(global_variables.WIDTH / 3 + global_variables.WIDTH / 7.25),int(global_variables.HEIGHT / 4 + global_variables.HEIGHT / 14 * 6)))
+quit_rect_menu = quit_img.get_rect(center=(int(global_variables.WIDTH / 3 + global_variables.WIDTH / 7.25),int(global_variables.HEIGHT / 4 + global_variables.HEIGHT / 14 * 5)))
 
 #Uno button
 uno_button_img = global_variables.UNO_BUTTON
 uno_button_img = pygame.transform.scale(uno_button_img,(int(global_variables.HEIGHT/4),int(global_variables.HEIGHT/4)))
 uno_button_rect = uno_button_img.get_rect(center=(int(global_variables.WIDTH/2),int(global_variables.HEIGHT/2)))
-
-
-#to chane the fps
-fps_changes = [30,45,60,90,120,144]
 
 #end game menu
 end_game_rect = pygame.Rect(0,0,int(global_variables.WIDTH/2),int(global_variables.HEIGHT/2))
@@ -344,11 +334,11 @@ def main_game_loop():
     #update values from json
     m_volume_value_img = options_font.render("{}".format(int(global_variables.MUSIC_VOLUME * 100)),True,(255,255,255))
     effects_volume_value_img = options_font.render("{}".format(int(global_variables.EFFECTS_VOLUME * 100)),True,(255,255,255))
-    fps_value_image = options_font.render("{}".format(global_variables.FPS),True,(255,255,255))
 
     SCREEN = pygame.display.set_mode((global_variables.WIDTH,global_variables.HEIGHT))
     pygame.display.set_caption("Uno")
-
+    pygame.display.set_icon(global_variables.ICON) 
+    
     clock = pygame.time.Clock()
     hold_on_timer = 0
     animation_timer = 0
@@ -377,6 +367,7 @@ def main_game_loop():
         #background image
 
         back_image = global_variables.BACKGROUND_IMAGE
+        back_image = pygame.transform.scale(back_image,(global_variables.WIDTH ,global_variables.HEIGHT))
         back_rect = pygame.Rect(0,0,global_variables.WIDTH,global_variables.HEIGHT)
         SCREEN.blit(back_image,back_rect)
 
@@ -452,20 +443,6 @@ def main_game_loop():
                         global_variables.JSON_DATA['effects_volume'] = global_variables.EFFECTS_VOLUME
                         with open(global_variables.SETTINGS,'w') as dump_json:
                             json.dump(global_variables.JSON_DATA,dump_json)
-                    elif left_arrow_rect_3.collidepoint(mouse_position) and global_variables.FPS > 30:
-                        menu_up = True
-                        index_fps = fps_changes.index(global_variables.FPS)
-                        global_variables.FPS = fps_changes[index_fps - 1]
-                        global_variables.JSON_DATA['fps'] = global_variables.FPS
-                        with open(global_variables.SETTINGS,'w') as dump_json:
-                            json.dump(global_variables.JSON_DATA,dump_json)
-                    elif right_arrow_rect_3.collidepoint(mouse_position) and global_variables.FPS < 144:
-                        menu_up = True
-                        index_fps = fps_changes.index(global_variables.FPS)
-                        global_variables.FPS = fps_changes[index_fps + 1]
-                        global_variables.JSON_DATA['fps'] = global_variables.FPS
-                        with open(global_variables.SETTINGS,'w') as dump_json:
-                            json.dump(global_variables.JSON_DATA,dump_json)
                     elif close_rect.collidepoint(mouse_position):
                         menu_up = True
                         menu_up = False
@@ -482,7 +459,6 @@ def main_game_loop():
                     #update values
                     m_volume_value_img = options_font.render("{}".format(int(global_variables.MUSIC_VOLUME * 100)),True,(255,255,255))
                     effects_volume_value_img = options_font.render("{}".format(int(global_variables.EFFECTS_VOLUME * 100)),True,(255,255,255))
-                    fps_value_image = options_font.render("{}".format(global_variables.FPS),True,(255,255,255))
 
                     if menu_up:
                         global_variables.MENU_SOUND.set_volume(global_variables.EFFECTS_VOLUME)
@@ -638,7 +614,7 @@ def main_game_loop():
 
         if game_color == 'd' and not menu_up:
             if play_turn == 'player':
-                hold_on_timer,play_turn, game_color = show_color_chooser(mouse_position,SCREEN,uno_time)
+                hold_on_timer,play_turn,game_color = show_color_chooser(mouse_position,SCREEN,uno_time)
                 if game_color == 'y': 
                     latest_animation = 'yellow'
                     global_variables.YELLOW_SOUND.set_volume(global_variables.EFFECTS_VOLUME)
@@ -744,15 +720,11 @@ def main_game_loop():
             SCREEN.blit(m_volume_value_img,m_volume_value_rect)
             SCREEN.blit(effects_volume_value_img,effects_volume_value_rect)
             SCREEN.blit(effects_volume_img,effects_volume_rect)
-            SCREEN.blit(fps_image,fps_rect)
-            SCREEN.blit(fps_value_image,fps_value_rect)
             SCREEN.blit(percentage_sign_image,percentage_sign_rect_2)
             SCREEN.blit(left_arrow,left_arrow_rect_1)
             SCREEN.blit(right_arrow,right_arrow_rect_1)
             SCREEN.blit(left_arrow,left_arrow_rect_2)
             SCREEN.blit(right_arrow,right_arrow_rect_2)
-            SCREEN.blit(left_arrow,left_arrow_rect_3)
-            SCREEN.blit(right_arrow,right_arrow_rect_3)
             SCREEN.blit(close_img,close_rect)
             SCREEN.blit(quit_img,quit_rect_menu)
             SCREEN.blit(retry_img,retry_rect_menu)
