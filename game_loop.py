@@ -393,6 +393,8 @@ def main_game_loop():
                 global_variables.RAINMAKER_SOUND.set_volume(global_variables.EFFECTS_VOLUME)
                 global_variables.RAINMAKER_SOUND.play()
                 winning_sound_played = True
+                animation_timer = -10
+                hold_on_timer = -10 #both are meaningless values
         elif len(deck_cpu) == 0:
             game_end = True
             play_turn = 'cpu'
@@ -400,6 +402,8 @@ def main_game_loop():
                 global_variables.NO_SOUND.set_volume(global_variables.EFFECTS_VOLUME)
                 global_variables.NO_SOUND.play()
                 winning_sound_played = True
+                animation_timer = -10
+                hold_on_timer = -10 #both are meaningless values
 
         if not game_end:
             #check if deck needs to be replaced
